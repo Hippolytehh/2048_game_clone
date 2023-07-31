@@ -1,0 +1,109 @@
+/* COLORS */
+/* grid background : #bbada0 */
+/* grid cells : #cdc1b3 */
+/* Font color : #767064 */
+/* 2 cell : #eee4da */
+/* 4 cell : #eee0c6 */
+/* 8 cell : #f3b174 */
+/* 16 cell : #fa7b5a */
+/* 32 cell : #fa7b5a */
+
+:root {
+    --grid-background: #bbada0;
+    --grid-cells: #cdc1b3;
+    --dark-font-color: #767064;
+    --light-font-color: #fff;
+    --n2: #eee4da;
+    --n4: #eee0c6;
+    --n8: #f3b174;
+    --n16: #f59563;
+    --n32: #fa7b5a;
+    --n64: #f76c4a;
+    --n128: #edcf72;
+    --n256: #ecc654;
+    --n512: #edc850;
+    --n1024: #eec029;
+    --n2048: #edc22e;
+    --n4096: #b88f0a;
+}
+
+body {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    background-color: #fff;
+
+    height: 100vh;
+    margin: 0; 
+}
+
+.title {
+    font-size: 8em;
+    font-weight: 200;
+    font-family:Arial, Helvetica, sans-serif;
+    color: var(--dark-font-color);
+    margin-top: -10px;
+    margin-bottom: 0px;
+}
+
+.description {
+    font-size: 1em;
+    font-weight: 200;
+    font-family:Arial, Helvetica, sans-serif;
+    text-align: center;
+    color: var(--dark-font-color);
+    margin-bottom: 10px;
+    max-width: 500px;
+}
+
+.score {
+    font-size: 6em;
+    font-weight: 800;
+    font-family:Arial, Helvetica, sans-serif;
+    text-align: center;
+    color: var(--dark-font-color);
+    margin: 0px;
+    margin-bottom: 20px;
+}
+
+.playground {
+    width: 500px;
+    height: 500px;
+    background: var(--grid-background);
+    overflow: hidden;
+    border-radius: 5px; /* empêce que grid annule l'effet arrondi de playground */
+}
+
+.grid {
+    display: grid;  
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    height: 100%;
+    width: 100%;
+    margin: auto;
+    border: 14px solid var(--grid-background);
+    grid-gap: 14px;
+    box-sizing: border-box; /* box-sizing définit la façon dont la hauteur et la largeur totale d'un élément est calculée */
+}
+
+.cell {
+    background: var(--grid-cells);
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 4em;
+    font-weight: 600;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+button {
+    margin-bottom: 10px;
+    height: 20px;
+    width: 75px;
+    text-align: center;
+}

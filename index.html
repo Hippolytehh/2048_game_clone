@@ -1,0 +1,46 @@
+<!-- https://www.youtube.com/watch?v=JSn-DJU8qf0 -->
+<!-- https://github.com/gabrielecirulli/2048 -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <h1 class="title">4096</h1>
+    <span class="description">Déplacez les éléments de la grille à l'aide des flèches de votre clavier. Les éléments du même nombre s'ajoutent pour former un nouvel élément égal à leur double.</span>
+    <h2 class="score">0</h2>
+    <button onclick="addNumber()">ADD</button>
+    <button onclick="resetGrid()">RESET</button>
+    <div class="playground">
+        <div class="grid">
+            <div class="cell" id="i1j1">16</div>
+            <div class="cell" id="i1j2">8</div>
+            <div class="cell" id="i1j3">8</div>
+            <div class="cell" id="i1j4"></div>
+            <div class="cell" id="i2j1">16</div>
+            <div class="cell" id="i2j2">64</div>
+            <div class="cell" id="i2j3"></div>
+            <div class="cell" id="i2j4"></div>
+            <div class="cell" id="i3j1">16</div>
+            <div class="cell" id="i3j2">64</div>
+            <div class="cell" id="i3j3"></div>
+            <div class="cell" id="i3j4"></div>
+            <div class="cell" id="i4j1">16</div>
+            <div class="cell" id="i4j2">128</div>
+            <div class="cell" id="i4j3"></div>
+            <div class="cell" id="i4j4"></div>
+        </div>
+        <script>
+        window.addEventListener("load", function() {
+            // resetGrid();
+            updateStyle();
+        });
+        </script>
+    </div>
+</body>
+</html>
