@@ -107,3 +107,22 @@ button {
     width: 75px;
     text-align: center;
 }
+
+/* Animations */
+.grow-animation {
+    animation-name: grow;
+    animation-duration: 0.5s;
+    animation-timing-function: ease, step-start, cubic-bezier(0.1, 0.7, 1, 0.1);
+  }
+
+@keyframes grow {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.35);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }

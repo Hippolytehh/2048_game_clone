@@ -1,31 +1,43 @@
-function addNumber(number=0) {
-    const rows = document.querySelectorAll(".cell");
-    let compteur = 0; 
-    while (true) {
-        if (compteur < 20) {
-            let i = (Math.floor(Math.random() * 4) + 1).toString(); 
-            let j = (Math.floor(Math.random() * 4) + 1).toString(); 
-            let targetCell = document.getElementById(`i${i}j${j}`);
-            if (!targetCell.innerHTML && number == 0) {
-                targetCell.innerHTML = (Math.floor(Math.random() * 2) + 1 ) * 2;
-                break;
-            } else if (!targetCell.innerHTML && number == 2) {
-                targetCell.innerHTML = 2;
-                break;
-            } else if (!targetCell.innerHTML && number == 4) {
-                targetCell.innerHTML = 4;
-                break;
-            } else {
-                compteur += 1
+function rotateMatrix(grid, deg) {
+    const n = grid.length;
+    const rotatedGrid = Array.from({ length: n }, () => Array(n).fill(0));
+    if (deg == -90) {
+        for (let row = 0; row < n; row++) {
+            for (let col = 0; col < n; col++) {
+            rotatedGrid[n - col - 1][row] = grid[row][col];
             };
-        } else {
-            // false -> game over
-            window.alert("GAME OVER")
-            resetGrid()
-            return false;
+        };
+    } else if (deg == 90) {
+        for (let row = 0; row < n; row++) {
+            for (let col = 0; col < n; col++) {
+              rotatedGrid[col][n - row - 1] = grid[row][col];
+            };
         };
     };
-    return true;
+    return rotatedGrid;
+};
+
+function addNumber(number=0) {
+    let cible; 
+    const rows = document.querySelectorAll(".cell");
+    let availableCells = []
+    rows.forEach(function(item) {
+        if (!item.innerText) {
+            availableCells.push(item)
+        }
+    })
+    if (availableCells.length > 0) {
+        const randomNumber = Math.floor(Math.random() * (availableCells.length)).toString()
+        cible = availableCells[randomNumber];
+        if (number == 0) {
+            cible.innerText = (Math.floor(Math.random() * 2) + 1 ) * 2;
+        } else if (number == 2) {
+            cible.innerText = 2;
+        } else if (number == 4) {
+            cible.innerText = 4;
+        }
+    };
+    return cible;
 };
 
 function updateStyle() {
@@ -103,11 +115,19 @@ function updateStyle() {
 function resetGrid() {
     const rows = document.querySelectorAll(".cell");
     rows.forEach(function(item) {
-        item.innerHTML = "";
+        item.innerText = "";
     });
-    addNumber(2);
-    addNumber(4);
-    updateStyle();
+    const firstNumber = addNumber((Math.floor(Math.random() * 2) + 1 ) * 2);
+    const secondNumber = addNumber((Math.floor(Math.random() * 2) + 1 ) * 2);
+    updateStyle()
+    firstNumber.classList.add('grow-animation');
+    secondNumber.classList.add('grow-animation');
+    firstNumber.addEventListener('animationend', () => {
+        firstNumber.classList.remove('grow-animation');
+      });
+    secondNumber.addEventListener('animationend', () => {
+        secondNumber.classList.remove('grow-animation');
+      });
 };
 
 document.onkeydown = (e) => {
@@ -124,31 +144,38 @@ document.onkeydown = (e) => {
 };
 
 function updateGrid(direction) {
+    const rows = document.querySelectorAll(".cell");
     let grid = [
         [0, 0, 0, 0],
         [0, 0, 0, 0],
         [0, 0, 0, 0],
         [0, 0, 0, 0],
     ];
-    let n = 0;
-    const rows = document.querySelectorAll(".cell");
+    let n = 0
     for (let i = 0; i < 4; i++) {
         for (let j = 0; j < 4; j++) {
-            grid[i][j] = rows[n].innerHTML === "" ? 0 : parseInt(rows[n].innerHTML);
+            grid[i][j] = rows[n].innerText === "" ? 0 : parseInt(rows[n].innerText);
             n++;
         };
     };
 
-    if (direction == "L") {
+    if (direction == "U" || direction == "D") {
+        grid = rotateMatrix(grid, -90);
+    };
+
+    if (direction == "L" || direction == "U") {
         for (let i = 0; i < 4; i++) {
-            for (let j = 3; j >= 0; j--) {
-                for (k = j - 1; k >= 0; k--) {
+            for (let j = 0; j < 4; j++) {
+                k = j + 1;
+                while (true) {
                     if (grid[i][k] != 0 && grid[i][k] != grid[i][j]) {
                         break;
                     } else if (grid[i][k] == grid[i][j]) {
                         grid[i][j] *= 2;
-                        grid[i][k] = 0;
+                        grid[i][k] *= 0;
+                        break;
                     };
+                    k += 1;
                 };
             };
             for (let j = 3; j >= 0; j--) {
@@ -156,23 +183,30 @@ function updateGrid(direction) {
                     if (grid[i][k] == 0 && grid[i][j+1]) {
                         grid[i][k] = grid[i][j];
                         grid[i][j] = grid[i][j+1];
+                        break;
                     } else if (grid[i][k] == 0 && !grid[i][j+1]) {
                         grid[i][k] = grid[i][j];
                         grid[i][j] = 0;
-                    };
+                        break;
+                    } else {
+                        break;
+                    }
                 };
             };
         };
-    } else if (direction == "R") {
+    } else if (direction == "R" || direction == "D") {
         for (let i = 0; i < 4; i++) {
-            for (let j = 0; j < 4; j++) {
-                for (let k = j + 1; k < 4; k++) {
+            for (let j = 3; j >= 0; j--) {
+                k = j - 1;
+                while (true) {
                     if (grid[i][k] != 0 && grid[i][k] != grid[i][j]) {
                         break;
                     } else if (grid[i][k] == grid[i][j]) {
                         grid[i][j] *= 2;
-                        grid[i][k] = 0;
+                        grid[i][k] *= 0;
+                        break;
                     };
+                    k = k - 1;
                 };
             };
             for (let j = 0; j < 4; j++) {
@@ -183,71 +217,40 @@ function updateGrid(direction) {
                     } else if (grid[i][k] == 0 && !grid[i][j-1]) {
                         grid[i][k] = grid[i][j];
                         grid[i][j] = 0;
-                    };
-                };
-            };
-        };
-    } else if (direction == "D") {
-        for (let j = 0; j < 4; j++) {
-            for (let i = 0; i < 4; i++) {
-                for (let k = i + 1; k < 4; k++) {
-                    if (grid[k][j] != 0 && grid[k][j] != grid[i][j]) {
+                    } else {
                         break;
-                    } else if (grid[k][j] == grid[i][j]) {
-                        grid[i][j] *= 2;
-                        grid[k][j] = 0;
-                    };
-                };
-            };
-            for (let i = 0; i < 4; i++) {
-                for (let k = i + 1; k < 4; k++) {
-                    if (grid[k][j] == 0 && grid[i-1]) {
-                        grid[k][j] = grid[i][j];
-                        grid[i][j] = grid[i-1][j];
-                    }   else if (grid[k][j] == 0 && !grid[i-1]) {
-                        grid[k][j] = grid[i][j];
-                        grid[i][j] = 0;
                     }
                 };
             };
         };
-    } else if (direction == "U") {
-        for (let j = 0; j < 4; j++) {
-            for (let i = 3; i >= 0; i--) {
-                for (let k = i - 1; k >= 0; k--) {
-                    if (grid[k][j] != 0 && grid[k][j] != grid[i][j]) {
-                        break;
-                    } else if (grid[k][j] == grid[i][j]) {
-                        grid[i][j] = 0;
-                        grid[k][j] *= 2;
-                    };
-                };
-            };
-            for (let i = 3; i >= 0; i--) {
-                for (let k = i - 1; k >= 0; k--) {
-                    if (grid[k][j] == 0 && grid[i+1]) {
-                        grid[k][j] = grid[i][j];
-                        grid[i][j] = grid[i+1][j];
-                    } else if (grid[k][j] == 0 && !grid[i+1]) {
-                        grid[k][j] = grid[i][j];
-                        grid[i][j] = 0;
-                    };
-                };
-            };
-        };
+    };
+
+    if (direction == "U" || direction == "D") {
+        grid = rotateMatrix(grid, 90);
     };
 
     n = 0;
     for (let i = 0; i < 4; i++) {
         for (let j = 0; j < 4; j++) {
             if (grid[i][j] != 0) {
-                rows[n].innerHTML = grid[i][j];
+                rows[n].innerText = grid[i][j];
             } else {
-                rows[n].innerHTML = "";
-            }
+                rows[n].innerText = "";
+            };
             n++;
-        }
-    }
-    addNumber();
+        };
+    };
+    let availableCells = []
+    console.log(rows)
+    rows.forEach(function(item) {
+        if (!item.innerText) {
+            availableCells.push(item)
+        };
+    });
+    const number = addNumber();
     updateStyle();
+    number.classList.add('grow-animation');
+    number.addEventListener('animationend', () => {
+        number.classList.remove('grow-animation');
+    });
 }
